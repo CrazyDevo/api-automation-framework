@@ -337,7 +337,7 @@ env=dev | qa | prod
 
 # 👨‍💻 Author
 
-Senior QA Automation Architecture Design
+Senior QA Automation Architecture Designer(Adam)
 
 ---
 
