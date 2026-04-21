@@ -17,4 +17,15 @@ public class BaseService {
                 .extract()
                 .response();
     }
+
+    protected Response patch(String endpoint, Object body) {
+        return given()
+                .spec(SpecBuilder.getRequestSpec())
+                .body(body)
+                .when()
+                .patch(endpoint)
+                .then()
+                .extract()
+                .response();
+    }
 }

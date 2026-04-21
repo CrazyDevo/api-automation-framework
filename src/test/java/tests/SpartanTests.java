@@ -2,7 +2,9 @@ package tests;
 
 import base.BaseTest;
 import io.qameta.allure.*;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import model.request.SpartanPatchRequest;
 import model.response.SpartanResponse;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -27,9 +29,19 @@ public class SpartanTests extends BaseTest {
         assertEquals(200, response.statusCode());
         assertEquals("Meta", response.jsonPath().getString("data.name"));
 
+
+        /*
+        seri----> java to json
+        deseri ----> json to java
+
+
+         */
+
         // POJO
         SpartanResponse spartan =
                 response.as(SpartanResponse.class);
+
+
 
         assertEquals("Meta", spartan.data.name);
     }
@@ -44,4 +56,32 @@ public class SpartanTests extends BaseTest {
 
         assertEquals(404, response.statusCode());
     }
+
+
+    @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("PATCH Spartan - Update name and phone")
+    void patchSpartanTest() {
+
+        // GIVEN
+        SpartanPatchRequest request =
+                new SpartanPatchRequest("Leonidas", "1234567890");
+
+        // WHEN
+        Response response = service.patchSpartan(15, request);
+
+        // THEN
+        assertEquals(200, response.statusCode());
+
+        // VERIFY WITH GET
+        Response getResponse = service.getSpartanById(12);
+
+        JsonPath json = getResponse.jsonPath();
+        assertEquals("Leonidas", json.getString("data.name"));
+        assertEquals("1234567890", json.getString("data.phone"));
+    }
+
+
+
 }
